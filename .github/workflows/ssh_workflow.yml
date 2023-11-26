@@ -18,8 +18,11 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      - name: Set up SSH keys
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+
       - name: Copy Files to Server
-        run: scp README.md ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/tmp/
+        run: scp -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa README.md ${{ secrets.SERVER_USERNAME }}@${{ secrets.SERVER_HOST }}:/tmp/
 
       - name: SSH to Server and Run Commands
         uses: appleboy/ssh-action@master
