@@ -9,6 +9,11 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      SSH_HOST: ${{ secrets.SERVER_HOST }}
+      SSH_USERNAME: ${{ secrets.SERVER_USERNAME }}
+      SSH_PORT: ${{ secrets.SERVER_PORT }}
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
@@ -17,6 +22,9 @@ jobs:
         uses: webfactory/ssh-agent@v0.8.0
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Copy Files to Server
+        run: scp README.md ${{ env.SSH_USERNAME }}@${{ env.SSH_HOST }}:/tmp/
 
       - name: SSH to Server and Run Commands
         uses: appleboy/ssh-action@master
@@ -27,3 +35,4 @@ jobs:
           script: |
             echo "Hello from the server!" | tee -a /tmp/hello.txt
             # Add more commands as needed
+
