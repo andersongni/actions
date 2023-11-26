@@ -24,7 +24,7 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Copy Files to Server
-        run: scp README.md ${{ env.SSH_USERNAME }}@${{ env.SSH_HOST }}:/tmp/
+        run: scp README.md ${{ env.SERVER_USERNAME }}@${{ env.SERVER_HOST }}:/tmp/
 
       - name: SSH to Server and Run Commands
         uses: appleboy/ssh-action@master
